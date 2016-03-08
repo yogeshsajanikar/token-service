@@ -53,7 +53,9 @@ tokenService :: R.Connection -> ScottyT LT.Text IO ()
 tokenService conn = do
   middleware logStdout
   middleware simpleCors
-  get "retrieve" $ do
+  let retrieve = "/retrieve"
+  options retrieve $ status status200
+  get retrieve $ do
     token  <- jsonData 
     result <- liftIO $ retrieveData conn token
     case result of
@@ -61,7 +63,9 @@ tokenService conn = do
                   status notFound404
                   json $ UserError "Invalid token or expired token"
       Just r  -> json $ UserData r
-  post "register" $ do
+  let register = "/register"
+  options register $ status status200
+  post register $ do
     (RegistryData e (UserData v)) <- jsonData
     token <- liftIO $ registerData conn v (toInteger e)
     json token
