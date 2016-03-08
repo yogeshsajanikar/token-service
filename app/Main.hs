@@ -40,11 +40,11 @@ loadLocalInfo :: Config -> IO ConnectInfo
 loadLocalInfo cfg = do
   host <- require cfg "token-server.host"
   port <- require cfg "token-server.port" :: IO Int
-  return $ defaultConnectInfo { connectHost = host, connectPort = port }
+  return $ defaultConnectInfo { connectHost = host, connectPort = fromIntegral port }
 
 loadBluemixVCap :: String -> IO ConnectInfo
 loadBluemixVCap service = do
   undefined
   
-main :: IO 
+main :: IO ()
 main = undefined
