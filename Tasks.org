@@ -1,0 +1,24 @@
+#+STARTUP: overview hidestars
+#+TITLE: Token Service for Traderwave
+
+* Token Service
+
+* Task List
+
+** TODO Web Service
+
+*** TODO Registration
+
+*** TODO Retrieval
+
+** TODO Registry
+
+*** TODO Creation of token
+
+*** TODO User data Structure
+
+*** TODO JSON Serialization
+
+**** TODO User Data
+
+**** TODO Token
