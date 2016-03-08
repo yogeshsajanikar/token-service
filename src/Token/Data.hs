@@ -1,14 +1,19 @@
+{-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE OverloadedStrings #-}
 module Token.Data
 (
  Token(),
  tokenString,
- createToken
+ createToken,
+ UserData(..),
+ UserError(..),
+ RegistryData(..)
 )               
 where
 
 import Data.Maybe
 import Data.Aeson
+import Data.Aeson.TH
 import Data.Aeson.Lens
 import Control.Monad
 import Control.Lens hiding ((.=))
@@ -35,7 +40,7 @@ instance FromJSON Token where
   parseJSON (Object v) = Token . TE.encodeUtf8  <$> v .: "token"
   parseJSON _ = undefined
 
-newtype UserData = UserData { userData :: T.Text }
+newtype UserData = UserData Value
 
 instance ToJSON UserData where
   toJSON (UserData d) = object [ "data" .= d ]
@@ -44,8 +49,16 @@ instance FromJSON UserData where
   parseJSON (Object v) = UserData <$> v .: "data"
   parseJSON _ = undefined
 
-data TokenData = TokenData { token :: Token
-                           , userdata :: UserData }
+-- | Token data 
+data RegistryData = RegistryData { expiresIn :: Int
+                                 , userData  :: UserData }
+
+$(deriveJSON defaultOptions ''RegistryData)
+
+-- | User error
+data UserError = UserError { error :: String }
+
+$(deriveJSON defaultOptions ''UserError)
 
 -- | Map of ASCII characteres allowed in token
 -- We consider range [a-z,A-Z,0-9]. This map is used for creating a token
